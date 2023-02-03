@@ -11,10 +11,11 @@ const NavbarPage = () => {
 
     const Logout = () => {
         localStorage.removeItem("user");
+        localStorage.removeItem("token");
         value = 1;
         window.location.reload(false);
     }
-    const logincredential = () => {
+    const loginCredential = () => {
         if (value === 1) {
             return <NavLink className="btn btn-outline-light " exact to="/login-user"><b>SignUp / SignIn</b></NavLink>;
         } else {
@@ -50,7 +51,7 @@ const NavbarPage = () => {
                         </li>
                     </ul>
                 </div>
-                {logincredential()}
+                {loginCredential()}
             </div>
         </nav>
     )

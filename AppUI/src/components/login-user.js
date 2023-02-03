@@ -23,8 +23,10 @@ const LoginUserPage = () => {
                 console.log("data ",response.data.result[0]);
                 localStorage.setItem('user', response.data.result[0].Name);
                 localStorage.setItem('token', response.data.token);
+                alert("Login Successfully..");
                 setLoginMessage("Login Successfully..");
             }
+            window.location.reload(false);
         });
     };
 

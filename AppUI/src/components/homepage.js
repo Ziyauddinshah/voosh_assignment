@@ -6,16 +6,20 @@ const HomePage = () => {
     const [name,setName] = useState([]);
     const [phoneNo,setPhoneNo] = useState([]);
     const [subTotal,setSubTotal] = useState([]);
+    const jwtToken = localStorage.getItem('token');
     useEffect(() => {
-        axios.get('http://localhost:3001/get-users').then((response) => {
+        axios.get('http://localhost:3001/get-users',{
+            headers:{
+                Authorization: `Bearer ${jwtToken}`,
+            },
+        }).then((response) => {
             setShowUsers(response.data);
         });
     },[]);
 
     const DisplayOrder = (User_Id,name) =>{
         setName(name);
-        const jwtToken = localStorage.getItem('token');
-        console.log(jwtToken);
+        //console.log(jwtToken);
         axios.get(`http://localhost:3001/get-order/${User_Id}`,{
             headers:{
                 Authorization: `Bearer ${jwtToken}`,

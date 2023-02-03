@@ -17,6 +17,7 @@ const AddUserPage = () => {
                 alert(response.data.message);
                 localStorage.setItem('user', name);
                 localStorage.setItem('token', response.data.token);
+                window.location.reload(false);
             } 
             else {
                 alert("error");

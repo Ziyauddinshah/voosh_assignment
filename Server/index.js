@@ -56,7 +56,7 @@ const verifyToken = (req,res,next) =>{
     try {
         console.log("JWT Token For verification: ",token)
         const decoded = jwt.verify(token,secret);
-        console.log("decoded: ",decoded);
+        //console.log("decoded: ",decoded);
         req.user = decoded;
         next();
     } catch(ex) {
@@ -65,7 +65,7 @@ const verifyToken = (req,res,next) =>{
 }
 
 // getting all users
-app.get("/get-users", (req,res) => {
+app.get("/get-users",verifyToken, (req,res) => {
     const sqlSelect = "SELECT * FROM Users";
     db.query(sqlSelect,(error,result) =>{
         res.send(result);
@@ -131,7 +131,7 @@ app.post("/login-user" ,(request,response) => {
 });
 
 // adding order of a user
-app.post("/add-order",(request,response) =>{
+app.post("/add-order",verifyToken,(request,response) =>{
     const userId = request.body.userid;
     const subTotal = request.body.subtotal;
     const phoneNo = request.body.phoneno;
