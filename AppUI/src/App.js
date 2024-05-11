@@ -7,7 +7,6 @@ import LoginUserPage from './components/login-user';
 import AddUserPage from './components/add-user';
 import SaveOrderPage from './components/add-order';
 
-// "react-bootstrap": "^1.6.1",
 
 function App() {
   return (
