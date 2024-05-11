@@ -9,7 +9,7 @@ const HomePage = () => {
   const jwtToken = localStorage.getItem("token");
   useEffect(() => {
     axios
-      .get("http://localhost:3001/get-users", {
+      .get("http://localhost:3001/user/get-all", {
         headers: {
           Authorization: `Bearer ${jwtToken}`,
         },
@@ -23,7 +23,7 @@ const HomePage = () => {
     setName(name);
     //console.log(jwtToken);
     axios
-      .get(`http://localhost:3001/get-order/${User_Id}`, {
+      .get(`http://localhost:3001/user/get-order/${User_Id}`, {
         headers: {
           Authorization: `Bearer ${jwtToken}`,
         },

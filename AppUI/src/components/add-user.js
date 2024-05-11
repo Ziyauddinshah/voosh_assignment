@@ -8,7 +8,7 @@ const AddUserPage = () => {
     const [phoneno, setPhoneNo] = useState([]);
     const [password, setPassword] = useState([]);
     const Register = () =>{
-        axios.post("http://localhost:3001/add-user", {
+        axios.post("http://localhost:3001/user/add-user", {
             name: name,
             phoneno: phoneno,
             password: password

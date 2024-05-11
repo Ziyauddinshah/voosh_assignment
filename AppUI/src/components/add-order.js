@@ -8,10 +8,9 @@ const SaveOrderPage = () => {
 
   const SaveOrder = () => {
     const jwtToken = localStorage.getItem("token");
-    console.log(jwtToken);
     axios
       .post(
-        "http://localhost:3001/add-order",
+        "http://localhost:3001/user/add-order",
         {
           userid: userid,
           subtotal: subtotal,
