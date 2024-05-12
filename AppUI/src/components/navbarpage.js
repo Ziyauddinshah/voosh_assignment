@@ -3,14 +3,14 @@ import { NavLink } from "react-router-dom";
 const NavbarPage = () => {
   let value = 1;
   let username = "";
-  if (localStorage.getItem("user")) {
-    username = localStorage.getItem("user");
+  if (localStorage.getItem("user_name")) {
+    username = localStorage.getItem("user_name");
     value = 0;
   }
 
   const Logout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
+    localStorage.removeItem("user_name");
+    localStorage.removeItem("jwt_token");
     value = 1;
     window.location.reload(false);
   };

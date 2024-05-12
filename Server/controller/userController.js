@@ -4,61 +4,88 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 const getAll = async (req, res) => {
-  const sqlSelect = "SELECT * FROM Users";
-  db.query(sqlSelect, (error, result) => {
-    res.send(result);
-  });
+  try {
+    const query = "SELECT * FROM Users";
+    db.query(query, (error, result) => {
+      if (error) {
+        res
+          .status(202)
+          .json({ message: "Something went worng in getAll, syntax error" });
+      }
+      res.status(200).json({ data: result });
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching in getAll" });
+  }
 };
 
 const addUser = async (req, res) => {
-  const name = req.body.name;
-  const phoneno = req.body.phoneno;
-  const password = req.body.password;
-  bcrypt.hash(password, saltRounds, (err, hashpassword) => {
-    if (err) res.send(err);
-    const sqlInsert =
-      "INSERT INTO Users (Name,Phone_No,Password) VALUES(?,?,?)";
-    db.query(sqlInsert, [name, phoneno, hashpassword], (error) => {
-      if (error) {
-        res.send(error);
-      } else {
-        const user = {
-          id: name,
-          phoneNo: phoneno,
-        };
-        const token = jwt_token.generateToken(user);
-        console.log("Generated JWT Token: ", token);
-        res.send({ token: token, message: "Success !" });
+  try {
+    const user_name = req.body.user_name;
+    const phone_no = req.body.phone_no;
+    const password = req.body.password;
+    bcrypt.hash(password, saltRounds, (err, hashpassword) => {
+      if (err) {
+        res.status(400).json({ error: err });
       }
-    });
-  });
-};
-
-const login = async (req, res) => {
-  const phoneno = req.body.phoneno;
-  const password = req.body.password;
-  const sqlInsert = "SELECT * FROM Users WHERE Phone_No = ?";
-  db.query(sqlInsert, [phoneno], (error, result) => {
-    if (error) res.send({ error: error });
-    if (result.length > 0) {
-      bcrypt.compare(password, result[0].Password, (err, res) => {
-        if (err) {
-          console.log(err);
-          res.send({ message: "Wrong login credentials!" });
-        } else if (res) {
+      const query = "INSERT INTO Users (Name,Phone_No,Password) VALUES(?,?,?)";
+      db.query(query, [user_name, phone_no, hashpassword], (error, result) => {
+        if (error) {
+          return res.status(202).send({
+            message: "Something went wrong! in addUser error, syntax error",
+          });
+        } else {
           const user = {
-            id: result[0].Name,
-            phoneNo: result[0].Phone_No,
+            user_name: user_name,
+            phone_no: phone_no,
           };
           const token = jwt_token.generateToken(user);
           console.log("Generated JWT Token: ", token);
-          res.send({ result, token: token });
+          res.status(200).json({ token: token, message: "Success!" });
         }
       });
-    } else {
-      res.send({ message: "User does not exist!" });
-    }
-  });
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching in addUser" });
+  }
+};
+
+const login = async (req, res) => {
+  try {
+    const phone_no = req.body.phoneno;
+    const password = req.body.password;
+    const query = "SELECT * FROM Users WHERE Phone_No = ?";
+    db.query(query, [phone_no], (error1, result1) => {
+      if (error1) {
+        return res.status(202).send({
+          message: "Something went wrong! in login error, syntax error",
+        });
+      } else {
+        if (result1.length > 0) {
+          bcrypt.compare(password, result1[0].Password, (error2, result2) => {
+            if (error2) {
+              res.status(202).json({ message: "Wrong login credentials!" });
+            }
+            const user = {
+              user_name: result1[0].Name,
+              phone_no: result1[0].Phone_No,
+            };
+            const token = jwt_token.generateToken(user);
+            // console.log("Generated JWT Token: ", token);
+            res.status(200).json({
+              message: "Login successfully...",
+              user_name: result1[0].Name,
+              jwt_token: token,
+            });
+          });
+        } else {
+          res.status(202).json({ message: "User does not exist!" });
+        }
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching in login" });
+  }
 };
 
 module.exports = { getAll, addUser, login };

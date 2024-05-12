@@ -7,10 +7,10 @@ const SaveOrderPage = () => {
   const [phoneno, setPhoneNo] = useState([]);
 
   const SaveOrder = () => {
-    const jwtToken = localStorage.getItem("token");
+    const jwt_token = localStorage.getItem("jwt_token");
     axios
       .post(
-        "http://localhost:3001/user/add-order",
+        "http://localhost:3001/order/add-order",
         {
           userid: userid,
           subtotal: subtotal,
@@ -18,7 +18,7 @@ const SaveOrderPage = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${jwtToken}`,
+            Authorization: `Bearer ${jwt_token}`,
           },
         }
       )

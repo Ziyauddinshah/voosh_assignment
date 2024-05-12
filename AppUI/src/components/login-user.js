@@ -15,18 +15,15 @@ const LoginUserPage = () => {
         password: password,
       })
       .then((response) => {
-        console.log(response);
-        if (response.data.message) {
-          console.log("message ", response.data.message);
-          setLoginMessage(response.data.message);
-        } else if (response.data != null) {
-          console.log("data ", response.data.result[0]);
-          localStorage.setItem("user", response.data.result[0].Name);
-          localStorage.setItem("token", response.data.token);
+        if (response.data) {
+          console.log(response);
+          localStorage.setItem("user_name", response.data.user_name);
+          localStorage.setItem("jwt_token", response.data.jwt_token);
           alert("Login Successfully..");
-          setLoginMessage("Login Successfully..");
+          setLoginMessage(response.data.message);
+        } else {
+          console.log(response);
         }
-        window.location.reload(false);
       });
   };
 
