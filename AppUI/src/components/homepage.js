@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import userService from "../services/userService";
+import orderService from "../services/orderService";
 
 const HomePage = () => {
   const [showusers, setShowUsers] = useState([]);
@@ -8,36 +9,22 @@ const HomePage = () => {
   const [subTotal, setSubTotal] = useState([]);
   useEffect(() => {
     const jwt_token = localStorage.getItem("jwt_token");
-
-    axios
-      .get("http://localhost:3001/user/get-all", {
-        headers: {
-          authorization: `Bearer ${jwt_token}`,
-        },
-      })
-      .then((response) => {
-        setShowUsers(response.data.data);
-      });
+    userService.getAllUserService(jwt_token).then((response) => {
+      setShowUsers(response.data.data);
+    });
   }, []);
 
   const DisplayOrder = (User_Id, name) => {
     const jwt_token = localStorage.getItem("jwt_token");
     setName(name);
-    axios
-      .get(`http://localhost:3001/order/get-order/${User_Id}`, {
-        headers: {
-          authorization: `Bearer ${jwt_token}`,
-        },
-      })
-      .then((response) => {
-        if (response.data.data.length) {
-          console.log(response.data);
-          setPhoneNo(response.data.data[0].Phone_No);
-          setSubTotal(response.data.data[0].Sub_Total);
-        } else {
-          console.log("no data");
-        }
-      });
+    orderService.getOrderByUserId(User_Id, jwt_token).then((response) => {
+      if (response.data.data.length) {
+        setPhoneNo(response.data.data[0].Phone_No);
+        setSubTotal(response.data.data[0].Sub_Total);
+      } else {
+        console.log("no data");
+      }
+    });
   };
   return (
     <div className="container col-md-10 mt-5 mb-2 p-3">

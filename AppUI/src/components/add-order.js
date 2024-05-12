@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import orderService from "../services/orderService";
 
 const SaveOrderPage = () => {
   const [userid, setUserId] = useState([]);
@@ -8,20 +8,8 @@ const SaveOrderPage = () => {
 
   const SaveOrder = () => {
     const jwt_token = localStorage.getItem("jwt_token");
-    axios
-      .post(
-        "http://localhost:3001/order/add-order",
-        {
-          userid: userid,
-          subtotal: subtotal,
-          phoneno: phoneno,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${jwt_token}`,
-          },
-        }
-      )
+    orderService
+      .addOrder(userid, subtotal, phoneno, jwt_token)
       .then((response) => {
         if (response.data.message) {
           alert(response.data.message);

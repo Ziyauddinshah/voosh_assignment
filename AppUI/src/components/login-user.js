@@ -1,30 +1,23 @@
 import React, { useState } from "react";
-import axios from "axios";
+import userService from "../services/userService";
 
 const LoginUserPage = () => {
   const [phoneno, setPhoneNo] = useState([]);
   const [password, setPassword] = useState([]);
   const [loginMessage, setLoginMessage] = useState([]);
 
-  axios.defaults.withCredentials = true;
-
   const Login = () => {
-    axios
-      .post("http://localhost:3001/user/login-user", {
-        phoneno: phoneno,
-        password: password,
-      })
-      .then((response) => {
-        if (response.data) {
-          console.log(response);
-          localStorage.setItem("user_name", response.data.user_name);
-          localStorage.setItem("jwt_token", response.data.jwt_token);
-          alert("Login Successfully..");
-          setLoginMessage(response.data.message);
-        } else {
-          console.log(response);
-        }
-      });
+    userService.loginService(phoneno, password).then((response) => {
+      if (response.data) {
+        console.log(response);
+        localStorage.setItem("user_name", response.data.user_name);
+        localStorage.setItem("jwt_token", response.data.jwt_token);
+        alert("Login Successfully..");
+        setLoginMessage(response.data.message);
+      } else {
+        console.log(response);
+      }
+    });
   };
 
   const loginMessageDisplay = () => {

@@ -1,28 +1,22 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import axios from "axios";
+import userService from "../services/userService";
 
 const AddUserPage = () => {
   const [name, setName] = useState([]);
   const [phoneno, setPhoneNo] = useState([]);
   const [password, setPassword] = useState([]);
   const Register = () => {
-    axios
-      .post("http://localhost:3001/user/add-user", {
-        user_name: name,
-        phone_no: phoneno,
-        password: password,
-      })
-      .then((response) => {
-        console.log(response);
-        if (response.data.message) {
-          alert(response.data.message);
-          localStorage.setItem("user_name", name);
-          localStorage.setItem("jwt_token", response.data.token);
-        } else {
-          alert("error");
-        }
-      });
+    userService.registerService(name, phoneno, password).then((response) => {
+      console.log(response);
+      if (response.data.message) {
+        alert(response.data.message);
+        localStorage.setItem("user_name", name);
+        localStorage.setItem("jwt_token", response.data.token);
+      } else {
+        alert("error");
+      }
+    });
   };
 
   return (
